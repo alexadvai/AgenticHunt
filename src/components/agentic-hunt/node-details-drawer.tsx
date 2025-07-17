@@ -41,12 +41,14 @@ export function NodeDetailsDrawer({
                     <div className="space-y-2 text-sm">
                         <p><strong>ID:</strong> <code className="text-xs">{node.id}</code></p>
                         <p><strong>Type:</strong> <span className="capitalize">{node.type}</span></p>
-                        <p><strong>Risk Score:</strong> <Badge variant={node.riskScore > 75 ? "destructive" : "secondary"}>{node.riskScore}</Badge></p>
+                        <div className="flex items-center gap-1"><strong>Risk Score:</strong> <Badge variant={node.riskScore > 75 ? "destructive" : "secondary"}>{node.riskScore}</Badge></div>
                         <p><strong>First Seen:</strong> {new Date(node.metadata.firstSeen).toLocaleString()}</p>
                         <p><strong>Last Seen:</strong> {new Date(node.metadata.lastSeen).toLocaleString()}</p>
-                        <p><strong>Tags:</strong></p>
-                        <div className="flex gap-2 flex-wrap">
-                            {node.metadata.tags.map((tag: string) => <Badge key={tag} variant="outline">{tag}</Badge>)}
+                        <div>
+                            <strong>Tags:</strong>
+                            <div className="flex gap-2 flex-wrap mt-1">
+                                {node.metadata.tags.map((tag: string) => <Badge key={tag} variant="outline">{tag}</Badge>)}
+                            </div>
                         </div>
                     </div>
                 </div>
