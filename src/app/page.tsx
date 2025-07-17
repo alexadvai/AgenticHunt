@@ -46,7 +46,7 @@ export default function Home() {
                     height={800}
                     alt="Agentic Hunt application screenshot"
                     className="rounded-lg"
-                    data-ai-hint="cybersecurity dashboard"
+                    data-ai-hint="hunt hackers"
                 />
             </div>
           </div>
