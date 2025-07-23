@@ -58,10 +58,10 @@ export default function AgenticHuntLayout({
                          <SidebarMenuItem key={item.label}>
                             <Link href={item.href} passHref>
                                 <SidebarMenuButton asChild isActive={isActive(item.href)} tooltip={item.label}>
-                                    <>
+                                    <span className="flex items-center gap-2">
                                         <item.icon />
                                         <span>{item.label}</span>
-                                    </>
+                                    </span>
                                 </SidebarMenuButton>
                             </Link>
                          </SidebarMenuItem>
