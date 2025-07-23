@@ -15,7 +15,7 @@ import {
   SidebarTrigger,
   SidebarInset,
 } from "@/components/ui/sidebar";
-import { Bot, GitGraph, Laptop, Network, Search, Shield } from "lucide-react";
+import { GitGraph, Laptop, Network, Search, Shield } from "lucide-react";
 
 const menuItems = [
     { href: "/agentic-hunt", label: "Attack Graphs", icon: GitGraph },
