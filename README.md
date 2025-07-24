@@ -6,6 +6,7 @@ Agentic Hunt is a powerful, graph-based visual threat hunting platform built wit
 
 -   **Attack Graph Visualization**: Visually explore your network and identity relationships to uncover hidden attack paths. Filter by domain, attack type, critical assets, and more.
 -   **AI-Assisted Hunt Queries**: Describe your threat hunting objectives in plain English and let the AI generate the corresponding BloodHound-style queries for you.
+-   **Remediation Copilot**: When a vulnerability is detected, the AI can generate a step-by-step remediation plan, including the necessary commands, to help analysts fix the issue quickly.
 -   **Agent Management**: Deploy and manage data collection agents across your environment to gather security-relevant observables.
 -   **AI-Powered Analysis**: The application uses a Genkit-powered AI copilot to:
     -   Suggest relevant graph queries based on environmental context.
@@ -21,7 +22,7 @@ Agentic Hunt is a powerful, graph-based visual threat hunting platform built wit
     ```
 2.  **Explore the UI**:
     -   Navigate to the **Agentic Hunt** page.
-    -   Switch between the **Attack Graphs**, **Hunt Queries**, **Agents**, and **Observables** tabs to explore the core features.
+    -   Use the sidebar to switch between the **Attack Graphs**, **Hunt Queries**, **Agents**, and **Observables** tabs to explore the core features.
     -   Interact with the **AI Copilot** in the node details drawer to see its analytical capabilities in action.
 
 This project is a demonstration of building a complex, AI-driven application using modern web technologies. Feel free to explore the code in the `src` directory to see how it all works.

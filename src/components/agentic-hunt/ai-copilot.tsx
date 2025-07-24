@@ -6,6 +6,7 @@ import {
 } from "@/ai/flows/suggest-graph-queries";
 import { summarizeCriticalPaths } from "@/ai/flows/summarize-critical-paths";
 import { detectPrivilegeEscalation } from "@/ai/flows/detect-privilege-escalation";
+import { remediateVulnerability } from "@/ai/flows/remediate-vulnerability";
 import {
   Accordion,
   AccordionContent,
@@ -13,23 +14,29 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { Bot, Loader2, Sparkles } from "lucide-react";
+import { Bot, Loader2, ShieldCheck, Sparkles } from "lucide-react";
 
 type AIResult = {
   title: string;
   content: string | string[];
 };
 
+type VulnerabilityDetails = {
+    type: string;
+    details: string;
+}
+
 export function AICopilot() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState<string | null>(null);
   const [result, setResult] = useState<AIResult | null>(null);
+  const [detectedVulnerability, setDetectedVulnerability] = useState<VulnerabilityDetails | null>(null);
 
   const handleSuggestQueries = async () => {
     setIsLoading("suggest");
     setResult(null);
+    setDetectedVulnerability(null);
     try {
       const res = await suggestGraphQueries({
         environmentDescription: "Corporate network with AD, cloud resources, and developer machines.",
@@ -47,6 +54,7 @@ export function AICopilot() {
   const handleSummarizePaths = async () => {
     setIsLoading("summarize");
     setResult(null);
+    setDetectedVulnerability(null);
     try {
       const res = await summarizeCriticalPaths({
         attackGraphData: JSON.stringify({nodes: [], edges: []}),
@@ -64,19 +72,45 @@ export function AICopilot() {
   const handleDetectEscalation = async () => {
     setIsLoading("escalation");
     setResult(null);
+    setDetectedVulnerability(null);
     try {
       const res = await detectPrivilegeEscalation({
         userPermissions: "User 'test-user' is member of 'Domain Users'",
         systemConfigurations: "Group 'Domain Users' has write access to GPO 'Default Domain Policy'",
       });
-      setResult({ title: "Privilege Escalation Detection", content: [res.explanation, `Severity: ${res.severity}`, ...res.recommendations] });
-      toast({ title: "AI analysis complete!" });
+       if(res.escalationDetected) {
+            setResult({ title: "Privilege Escalation Detected", content: [res.explanation, `Severity: ${res.severity}`, ...res.recommendations] });
+            setDetectedVulnerability({ type: "Privilege Escalation", details: res.explanation });
+            toast({ title: "Vulnerability detected!" });
+       } else {
+            setResult({ title: "No Privilege Escalation Detected", content: "No vulnerabilities found based on the provided data."});
+            toast({ title: "Scan complete!"});
+       }
     } catch (e) {
       toast({ variant: "destructive", title: "AI Error", description: "Could not detect escalation." });
     } finally {
       setIsLoading(null);
     }
   };
+
+  const handleRemediate = async () => {
+    if (!detectedVulnerability) return;
+    setIsLoading("remediate");
+    setResult(null);
+    try {
+        const res = await remediateVulnerability({
+            vulnerabilityType: detectedVulnerability.type,
+            details: detectedVulnerability.details,
+        });
+        setResult({ title: "Remediation Plan", content: res.remediationPlan });
+        toast({ title: "Remediation plan generated." });
+    } catch (e) {
+        toast({ variant: "destructive", title: "AI Error", description: "Could not generate remediation plan."});
+    } finally {
+        setIsLoading(null);
+        setDetectedVulnerability(null);
+    }
+  }
 
   return (
     <div>
@@ -127,6 +161,15 @@ export function AICopilot() {
                 ) : (
                     <p className="text-sm">{result.content}</p>
                 )}
+            </div>
+        )}
+
+        {detectedVulnerability && (
+            <div className="mt-4">
+                 <Button onClick={handleRemediate} disabled={!!isLoading} className="w-full">
+                    {isLoading === 'remediate' ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <ShieldCheck className="mr-2 h-4 w-4" />}
+                    Generate Remediation Plan
+                </Button>
             </div>
         )}
     </div>
