@@ -1,8 +1,20 @@
 "use client";
 
 import { useState } from "react";
+import Image from 'next/image';
+import { format } from "date-fns";
+import { Calendar as CalendarIcon, Filter, Gem, Globe, Shield } from "lucide-react";
+
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -11,14 +23,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
 import { NodeDetailsDrawer } from "./node-details-drawer";
-import { Filter, Gem, Globe, Shield } from "lucide-react";
-import Image from 'next/image';
+
 
 export function AttackGraphsTab() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [selectedNode, setSelectedNode] = useState<any>(null);
+  const [date, setDate] = useState<Date>();
 
   const handleNodeClick = () => {
     setSelectedNode({
@@ -68,6 +79,29 @@ export function AttackGraphsTab() {
               <SelectItem value="lateral-movement">Lateral Movement</SelectItem>
             </SelectContent>
           </Select>
+          
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant={"outline"}
+                className={cn(
+                  "w-[200px] justify-start text-left font-normal",
+                  !date && "text-muted-foreground"
+                )}
+              >
+                <CalendarIcon className="mr-2 h-4 w-4" />
+                {date ? format(date, "PPP") : <span>Pick a date</span>}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0">
+              <Calendar
+                mode="single"
+                selected={date}
+                onSelect={setDate}
+                initialFocus
+              />
+            </PopoverContent>
+          </Popover>
 
           <div className="flex items-center space-x-2">
             <Switch id="da-paths" />
