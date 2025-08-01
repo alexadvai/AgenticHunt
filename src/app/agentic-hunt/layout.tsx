@@ -16,6 +16,7 @@ import {
   SidebarInset,
 } from "@/components/ui/sidebar";
 import { GitGraph, Laptop, Network, Search, Shield } from "lucide-react";
+import { ThemeSwitcher } from "@/components/theme-switcher";
 
 const menuItems = [
     { href: "/agentic-hunt", label: "Attack Graphs", icon: GitGraph },
@@ -69,6 +70,7 @@ export default function AgenticHuntLayout({
                 </SidebarMenu>
             </SidebarContent>
             <SidebarFooter>
+                <ThemeSwitcher />
                 <div className="p-2 text-xs text-muted-foreground group-data-[collapsible=icon]:hidden">
                     <p>&copy; 2024 Agentic Hunt</p>
                 </div>
